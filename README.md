@@ -11,3 +11,13 @@ TODO
 ## Storybook
 
 <https://www.chakra-ui.com/docs/components/segmented-control>
+
+## MSW
+
+```bash
+npm install msw@latest --save-dev
+```
+
+```bash
+npx msw init ./public 
+```
