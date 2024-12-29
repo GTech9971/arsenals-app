@@ -1,11 +1,11 @@
 import { SegmentedControl } from "./ui/segmented-control"
 import { z } from "zod"
+import { api } from "@/lib/api-client";
 import { Controller, useForm } from "react-hook-form"
 import { Button } from "@chakra-ui/react"
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useMemo, useState } from "react";
-import { CategoriesApi, FetchGunCategoryResponse } from "@gtech9971/arsenals.model";
-import axios from 'axios';
+import { useEffect, useState } from "react";
+import { FetchGunCategoryResponse } from "@gtech9971/arsenals.model";
 
 const formSchema = z.object({
     category: z.string({ message: 'required' }),
@@ -16,19 +16,18 @@ type FormValues = z.infer<typeof formSchema>;
 export const GunCategorySegment = () => {
 
     const [categories, setCategories] = useState<FetchGunCategoryResponse | null>(null);
-    const api: CategoriesApi = useMemo(() => new CategoriesApi(), []);
+
 
     useEffect(() => {
         const fetchData = async () => {
-            const data = await axios.get<FetchGunCategoryResponse | null>('http://localhost:5000/api/v1/arsenals/categories');
-            // const data = await api.fetchGunCategories();
+            const data = await api.get<FetchGunCategoryResponse | null>('/categories');
             if (data?.data) {
                 setCategories(data.data);
             }
         };
 
         fetchData();
-    }, [api]);
+    }, []);
 
     const {
         handleSubmit,
