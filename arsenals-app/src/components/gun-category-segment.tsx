@@ -2,7 +2,8 @@ import { SegmentedControl } from "./ui/segmented-control"
 import { z } from "zod"
 import { api } from "@/lib/api-client";
 import { Controller, useForm } from "react-hook-form"
-import { Button } from "@chakra-ui/react"
+import { IoMdAdd } from "react-icons/io";
+import { IconButton } from "@chakra-ui/react"
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { FetchGunCategoryResponse } from "@gtech9971/arsenals.model";
@@ -31,7 +32,6 @@ export const GunCategorySegment = () => {
 
     const {
         handleSubmit,
-        formState: { errors },
         control,
     } = useForm<FormValues>({
         defaultValues: undefined,
@@ -59,9 +59,10 @@ export const GunCategorySegment = () => {
 
             </Controller>
 
-            <Button size="sm" type="submit">
-                Submit
-            </Button>
+            <IconButton variant='subtle'>
+                <IoMdAdd />
+            </IconButton>
+
         </form >
     )
 }
