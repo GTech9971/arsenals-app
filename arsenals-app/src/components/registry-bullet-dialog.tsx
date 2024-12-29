@@ -14,7 +14,7 @@ import {
 } from "./ui/dialog";
 import { Button } from "./ui/button";
 import { Field } from "./ui/field";
-import { Input } from "@chakra-ui/react/";
+import { Input } from "@chakra-ui/react";
 
 const formSchema = z.object({
     name: z.string().nonempty({ message: '弾丸名は必須です。' }),
