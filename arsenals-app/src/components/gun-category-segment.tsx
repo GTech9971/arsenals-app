@@ -21,8 +21,8 @@ export const GunCategorySegment = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const data = await api.get<FetchGunCategoryResponse | null>('/categories');
-            if (data?.data) {
+            const data = await api.get<FetchGunCategoryResponse>('/categories');
+            if (data.data) {
                 setCategories(data.data);
             }
         };

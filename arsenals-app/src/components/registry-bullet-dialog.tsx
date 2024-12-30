@@ -15,10 +15,12 @@ import {
 import { Button } from "./ui/button";
 import { Field } from "./ui/field";
 import { Input } from "@chakra-ui/react";
+import { RegistryBulletRequest, RegistryBulletResponse } from "@gtech9971/arsenals.model";
+import { api } from "@/lib/api-client";
 
 const formSchema = z.object({
     name: z.string().nonempty({ message: '弾丸名は必須です。' }),
-    damage: z.number().nonnegative({ message: 'ダメージは1以上です。' })
+    damage: z.preprocess((val) => parseInt(val as string), z.number().nonnegative().min(1, "ダメージは1以上です").max(5000, "ダメージは5000以下です。"))
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -37,6 +39,18 @@ export const RegistryBulletDialog = () => {
 
     const onSubmit = handleSubmit((data) => {
         console.log(data);
+        const request: RegistryBulletRequest = {
+            name: data.name,
+            damage: data.damage
+        };
+
+        api.post<RegistryBulletResponse>("bullets", request).then(response => {
+            console.log(response);
+        }).catch(error => {
+
+            throw error;
+        });
+
         setIsOpen(false);
     });
 
@@ -75,7 +89,7 @@ export const RegistryBulletDialog = () => {
                             name="damage"
                             render={({ field }) => (
                                 <Field label="弾丸名" required>
-                                    <Input placeholder="9mm" type="number" {...field} />
+                                    <Input placeholder="12" type="number" {...field} />
                                     {formState.errors.damage && (
                                         <span style={{ color: 'red', fontSize: '12px' }}>
                                             {formState.errors.damage.message}

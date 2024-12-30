@@ -3,8 +3,9 @@ import { ChakraProvider, defaultSystem } from "@chakra-ui/react"
 import { initialize, mswDecorator } from 'msw-storybook-addon';
 import { handlers } from '../src/testing/mocks/handlers';
 
+
 initialize({
-  onUnhandledRequest: 'warn'
+  // onUnhandledRequest: 'warn'
 });
 
 const preview: Preview = {

@@ -15,6 +15,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Field } from "./ui/field";
 import { Input } from "@chakra-ui/react";
 import { useState } from "react";
+import { api } from "@/lib/api-client";
+import { RegistryGunCategoryRequest, RegistryGunCategoryResponse } from "@gtech9971/arsenals.model";
+import { toaster } from "./ui/toaster";
 
 const formSchema = z.object({
     name: z.string().nonempty({ message: 'カテゴリー名は必須です。' }),
@@ -31,12 +34,26 @@ export const RegistryGunCategoryDialog = () => {
         control,
         formState
     } = useForm<FormValues>({
-        defaultValues: undefined,
         resolver: zodResolver(formSchema)
     });
 
-    const onSubmit = handleSubmit((data) => {
+    const onSubmit = handleSubmit(async (data) => {
         console.log(data);
+        const request: RegistryGunCategoryRequest = {
+            name: data.name
+        };
+
+        api.post<RegistryGunCategoryResponse>('categories', request).then(response => {
+            toaster.create({
+                description: `銃カテゴリーを登録しました。${response.data.data?.id}`,
+                type: 'success',
+                duration: 1000,
+                placement: 'top'
+            });
+            console.log(response);
+        }).catch(error => {
+            throw error;
+        });
         setIsOpen(false);
     });
 
