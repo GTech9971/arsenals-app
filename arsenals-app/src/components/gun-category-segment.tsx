@@ -16,14 +16,15 @@ type FormValues = z.infer<typeof formSchema>;
 
 export const GunCategorySegment = () => {
 
-    const [categories, setCategories] = useState<FetchGunCategoryResponse | null>(null);
+    const [categories, setCategories] = useState<string[]>(['すべて']);
 
 
     useEffect(() => {
         const fetchData = async () => {
-            const data = await api.get<FetchGunCategoryResponse>('/categories');
-            if (data.data) {
-                setCategories(data.data);
+            const response = await api.get<FetchGunCategoryResponse>('/categories');
+            if (response.data.data) {
+                const category: string[] = response.data.data.map(x => x.name!);
+                setCategories(['すべて', ...category]);
             }
         };
 
@@ -52,7 +53,7 @@ export const GunCategorySegment = () => {
                         onBlurCapture={field.onBlur}
                         name={field.name}
                         value={field.value}
-                        items={categories.data?.map(x => x.name) as string[]}
+                        items={categories}
                         onValueChange={({ value }) => field.onChange(value)}
                     />
                 )}>

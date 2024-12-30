@@ -4,7 +4,7 @@ import { Gun } from "@gtech9971/arsenals.model";
 export const GunCard = (props: Gun) => {
     return (
         <Card.Root width="320px">
-            <Image src={props.imageUrl} />
+            <Image src={props.imageUrl} width="318px" height="212px" />
 
             <Card.Body gap="2">
                 <Card.Title mt='2'>{props.name}</Card.Title>

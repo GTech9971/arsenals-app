@@ -1,6 +1,6 @@
 import { http, HttpResponse } from "msw";
 import { env } from '@/config/env';
-import { FetchGunCategoryResponse, RegistryGunCategoryResponse } from '@gtech9971/arsenals.model'
+import { FetchGunCategoryResponse, GunCategory, RegistryGunCategoryResponse } from '@gtech9971/arsenals.model'
 
 /**
  * 銃カテゴリーのMSWハンドラー
@@ -11,8 +11,9 @@ export const categoriesHandlers = [
         return HttpResponse.json<FetchGunCategoryResponse>({
             error: undefined,
             data: [
-                { id: 'C-0001', name: 'ハンドガン' },
-                { id: 'C-0002', name: 'ライフル' }
+                DummyCategoryA,
+                DummyCategoryB,
+                DummyCategoryC,
             ]
         }, { status: 200 });
     }),
@@ -25,3 +26,17 @@ export const categoriesHandlers = [
         }, { status: 201 })
     }),
 ]
+
+/** ハンドガン */
+export const DummyCategoryA: GunCategory = {
+    id: 'C-1000', name: 'ハンドガン'
+}
+
+/** ライフル */
+export const DummyCategoryB: GunCategory = {
+    id: 'C-2000', name: 'ライフル'
+}
+/** サブマシンガン */
+export const DummyCategoryC: GunCategory = {
+    id: 'C-3000', name: 'サブマシンガン'
+}
