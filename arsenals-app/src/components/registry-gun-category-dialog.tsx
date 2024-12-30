@@ -13,11 +13,12 @@ import {
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Field } from "./ui/field";
-import { Input } from "@chakra-ui/react";
+import { IconButton, Input } from "@chakra-ui/react";
 import { useState } from "react";
 import { api } from "@/lib/api-client";
 import { RegistryGunCategoryRequest, RegistryGunCategoryResponse } from "@gtech9971/arsenals.model";
 import { toaster } from "./ui/toaster";
+import { IoMdAdd } from "react-icons/io";
 
 const formSchema = z.object({
     name: z.string().nonempty({ message: 'カテゴリー名は必須です。' }),
@@ -51,17 +52,16 @@ export const RegistryGunCategoryDialog = () => {
                 placement: 'top'
             });
             console.log(response);
-        }).catch(error => {
-            throw error;
         });
         setIsOpen(false);
     });
 
     return (
-
         <DialogRoot lazyMount placement='center' open={isOpen} onOpenChange={(e) => setIsOpen(e.open)}>
             <DialogTrigger asChild>
-                <Button>Open</Button>
+                <IconButton variant='subtle' data-testid="open">
+                    <IoMdAdd />
+                </IconButton>
             </DialogTrigger>
 
             <DialogContent>
@@ -70,7 +70,6 @@ export const RegistryGunCategoryDialog = () => {
                 </DialogHeader>
 
                 <DialogBody>
-
                     <form id="form" onSubmit={onSubmit}>
                         {/* カテゴリー名 */}
                         <Controller
@@ -87,10 +86,7 @@ export const RegistryGunCategoryDialog = () => {
                                 </Field>
                             )}>
                         </Controller>
-
-
                     </form>
-
                 </DialogBody>
 
                 <DialogFooter>
@@ -101,6 +97,5 @@ export const RegistryGunCategoryDialog = () => {
                 </DialogFooter>
             </DialogContent>
         </DialogRoot>
-
     )
 }
