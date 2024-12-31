@@ -88,7 +88,7 @@ export const RegistryBulletDialog = () => {
                             control={control}
                             name="damage"
                             render={({ field }) => (
-                                <Field label="弾丸名" required>
+                                <Field label="ダメージ" required>
                                     <Input placeholder="12" type="number" {...field} />
                                     {formState.errors.damage && (
                                         <span style={{ color: 'red', fontSize: '12px' }}>

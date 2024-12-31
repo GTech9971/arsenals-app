@@ -35,6 +35,7 @@ export const RegistryGunCategoryDialog = () => {
         control,
         formState
     } = useForm<FormValues>({
+        defaultValues: { name: '' },
         resolver: zodResolver(formSchema)
     });
 
@@ -70,7 +71,7 @@ export const RegistryGunCategoryDialog = () => {
                 </DialogHeader>
 
                 <DialogBody>
-                    <form id="form" onSubmit={onSubmit}>
+                    <form id="registryGunCategoryForm" noValidate onSubmit={onSubmit}>
                         {/* カテゴリー名 */}
                         <Controller
                             control={control}
@@ -93,7 +94,7 @@ export const RegistryGunCategoryDialog = () => {
                     <DialogActionTrigger asChild>
                         <Button variant="outline">Cancel</Button>
                     </DialogActionTrigger>
-                    <Button form="form" type="submit">Save</Button>
+                    <Button form="registryGunCategoryForm" type="submit">Save</Button>
                 </DialogFooter>
             </DialogContent>
         </DialogRoot>
