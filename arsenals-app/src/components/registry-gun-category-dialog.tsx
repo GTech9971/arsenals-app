@@ -17,7 +17,6 @@ import { IconButton, Input } from "@chakra-ui/react";
 import { useState } from "react";
 import { api } from "@/lib/api-client";
 import { RegistryGunCategoryRequest, RegistryGunCategoryResponse } from "@gtech9971/arsenals.model";
-import { toaster } from "./ui/toaster";
 import { IoMdAdd } from "react-icons/io";
 
 const formSchema = z.object({
@@ -46,12 +45,6 @@ export const RegistryGunCategoryDialog = () => {
         };
 
         api.post<RegistryGunCategoryResponse>('categories', request).then(response => {
-            toaster.create({
-                description: `銃カテゴリーを登録しました。${response.data.data?.id}`,
-                type: 'success',
-                duration: 1000,
-                placement: 'top'
-            });
             console.log(response);
         });
         setIsOpen(false);
