@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import { FetchGunsResponse, Gun, GunCategory } from "@gtech9971/arsenals.model";
 import { api } from "@/lib/api-client";
 import { Fab } from "../ui/fab";
+import { ContentLayout } from "./content-layout";
 
 
 export const ViewLayout = () => {
@@ -46,22 +47,24 @@ export const ViewLayout = () => {
 
     return (
         <>
-            <VStack>
+            <ContentLayout title="Arsenals">
+                <VStack>
 
-                <GunCategorySegment onChange={onChangeCategory} />
+                    <GunCategorySegment onChange={onChangeCategory} />
 
-                <Grid templateColumns="repeat(3, 1fr)" gap="3" >
-                    {guns.map((gun, index) => (
-                        <GridItem key={index} >
-                            <GunCard {...gun} />
-                        </GridItem>
-                    ))}
+                    <Grid templateColumns="repeat(3, 1fr)" gap="3" >
+                        {guns.map((gun, index) => (
+                            <GridItem key={index} >
+                                <GunCard {...gun} />
+                            </GridItem>
+                        ))}
 
-                </Grid>
+                    </Grid>
 
-                <Fab />
+                    <Fab />
 
-            </VStack>
+                </VStack>
+            </ContentLayout>
         </>
     )
 }

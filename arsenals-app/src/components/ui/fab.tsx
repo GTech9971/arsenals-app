@@ -8,9 +8,10 @@ export type FabProps = {
 export const Fab: React.FC<FabProps> = ({ onClick }) => {
     return (
         <IconButton
-            position='fixed'
-            bottom='4'
-            right='4'
+            position='absolute'
+            bottom='16'
+            right='8'
+            zIndex={999}
             onClick={onClick} >
             <IoMdAdd />
         </IconButton>
