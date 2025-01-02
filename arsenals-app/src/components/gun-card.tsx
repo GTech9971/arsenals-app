@@ -1,22 +1,22 @@
-import { Card, Image } from "@chakra-ui/react"
 import { Gun } from "@gtech9971/arsenals.model";
+import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonImg } from "@ionic/react";
 
 export const GunCard = (props: Gun) => {
     return (
-        <Card.Root width="320px">
-            <Image src={props.imageUrl} width="318px" height="212px" />
-
-            <Card.Body gap="2">
-                <Card.Title mt='2'>{props.name}</Card.Title>
-                <Card.Description>
+        <IonCard style={{ width: '320px' }}>
+            <IonImg src={props.imageUrl} />
+            <IonCardHeader>
+                <IonCardTitle>
+                    {props.name}
+                </IonCardTitle>
+                <IonCardSubtitle>
                     {props.category?.name}
-                </Card.Description>
+                </IonCardSubtitle>
 
-            </Card.Body>
-
-            <Card.Footer justifyContent="flex-end">
-                <p>装弾数:{props.capacity}</p>
-            </Card.Footer>
-        </Card.Root>
+            </IonCardHeader>
+            <IonCardContent>
+                {props.capacity}
+            </IonCardContent>
+        </IonCard>
     )
 }

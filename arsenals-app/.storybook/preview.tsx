@@ -1,7 +1,25 @@
 import type { Preview } from "@storybook/react";
-import { ChakraProvider, defaultSystem } from "@chakra-ui/react"
 import { initialize, mswDecorator } from 'msw-storybook-addon';
 import { handlers } from '../src/testing/mocks/handlers';
+
+
+import { setupIonicReact } from "@ionic/react";
+//ionic フレームワークをstorybookに適応
+/* Core CSS required for Ionic components to work properly */
+import '@ionic/react/css/core.css';
+/* Basic CSS for apps built with Ionic */
+import '@ionic/react/css/normalize.css';
+import '@ionic/react/css/structure.css';
+import '@ionic/react/css/typography.css';
+/* Optional CSS utils that can be commented out */
+import '@ionic/react/css/padding.css';
+import '@ionic/react/css/float-elements.css';
+import '@ionic/react/css/text-alignment.css';
+import '@ionic/react/css/text-transformation.css';
+import '@ionic/react/css/flex-utils.css';
+import '@ionic/react/css/display.css';
+
+setupIonicReact();
 
 
 initialize({
@@ -21,11 +39,6 @@ const preview: Preview = {
     }
   },
   decorators: [
-    (Story) => (
-      <ChakraProvider value={defaultSystem}>
-        <Story />
-      </ChakraProvider>
-    ),
     mswDecorator
   ],
 };

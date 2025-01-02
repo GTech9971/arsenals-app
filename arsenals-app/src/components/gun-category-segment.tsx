@@ -1,9 +1,9 @@
-import { SegmentedControl } from "./ui/segmented-control"
 import { api } from "@/lib/api-client";
 import { useEffect, useState } from "react";
 import { FetchGunCategoryResponse, GunCategory } from "@gtech9971/arsenals.model";
 import { RegistryGunCategoryDialog } from "./registry-gun-category-dialog";
-import { HStack } from "@chakra-ui/react";
+import { IonSegment, IonSegmentButton } from "@ionic/react";
+import { SegmentValue } from "@ionic/core";
 
 
 export type GunCategorySegmentProp = {
@@ -12,7 +12,7 @@ export type GunCategorySegmentProp = {
 
 export const GunCategorySegment: React.FC<GunCategorySegmentProp> = ({ onChange }) => {
 
-    const [selected, setSelected] = useState<string>('すべて');
+    const [selected, setSelected] = useState<GunCategory>({ id: 'all', name: 'すべて' });
     const [categories, setCategories] = useState<GunCategory[]>([{ id: 'all', name: 'すべて' }]);
 
     useEffect(() => {
@@ -28,23 +28,32 @@ export const GunCategorySegment: React.FC<GunCategorySegmentProp> = ({ onChange 
     }, []);
 
 
-    const handleSegmentChange = ((name: string) => {
-        setSelected(name);
-        onChange(categories.find(x => x.name === name));
+    const handleSegmentChange = ((value: SegmentValue | undefined) => {
+        if (!value) { return; }
+        const category: GunCategory = value as GunCategory;
+        setSelected(category);
+        onChange(category);
     });
 
     if (!categories) { return <div>Loading...</div> }
 
     return (
         <>
-            <HStack>
-                <SegmentedControl
-                    value={selected}
-                    items={categories.map(x => x.name!)}
-                    onValueChange={(e) => handleSegmentChange(e.value)} />
+            <div style={{ flex: 'display' }}>
+                <IonSegment
+                    value={selected as SegmentValue}
+                    onIonChange={(e) => handleSegmentChange(e.detail.value)}>
+                    {categories.map((category, index) =>
+                    (
+                        <IonSegmentButton key={index} value={category.id}>
+                            {category.name}
+                        </IonSegmentButton>
+                    )
+                    )}
+                </IonSegment>
 
                 <RegistryGunCategoryDialog />
-            </HStack>
+            </div>
         </>
     )
 }

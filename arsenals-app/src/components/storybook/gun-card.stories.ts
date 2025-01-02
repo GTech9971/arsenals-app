@@ -22,3 +22,13 @@ export const Primary: Story = {
         category: { name: 'アサルトライフル' }
     }
 };
+
+export const Handgun: Story = {
+    args: {
+        id: "G-1000",
+        name: 'M1911A1',
+        category: { name: 'ハンドガン' },
+        capacity: 6,
+        imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQlOzyXOpgL7MotXGpyGwMFDPmaklfRU-E_4w&s',
+    }
+}
