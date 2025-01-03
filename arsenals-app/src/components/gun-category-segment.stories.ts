@@ -1,6 +1,5 @@
 import { Meta, StoryObj } from "@storybook/react";
-import { GunCategorySegment } from "../gun-category-segment";
-import { GunCategory } from "@gtech9971/arsenals.model";
+import { GunCategorySegment } from "./gun-category-segment";
 
 const meta = {
     title: 'Arsenals/GunCategorySegment',
@@ -18,6 +17,6 @@ type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {
     args: {
-        onChange: (value: GunCategory | undefined) => { console.debug(value); }
+        onChange: (value?: string | undefined) => { console.debug(value); }
     }
 }

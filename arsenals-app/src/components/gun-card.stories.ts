@@ -1,5 +1,5 @@
 import { Meta, StoryObj } from "@storybook/react";
-import { GunCard } from "../gun-card";
+import { GunCard } from "./gun-card";
 
 const meta = {
     title: 'Arsenals/GunCard',

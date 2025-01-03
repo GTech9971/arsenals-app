@@ -1,13 +1,13 @@
-import { GunCategorySegment } from "../gun-category-segment";
-import { GunCard } from "../gun-card";
+import { GunCategorySegment } from "../../components/gun-category-segment";
+import { GunCard } from "../../components/gun-card";
 import { useCallback, useEffect, useState } from "react";
 import { FetchGunsResponse, Gun } from "@gtech9971/arsenals.model";
 import { api } from "@/lib/api-client";
-import { ContentLayout } from "./content-layout";
+import { ContentLayout } from "../../components/layouts/content-layout";
 import { IonCol, IonFab, IonFabButton, IonGrid, IonIcon, IonRow } from "@ionic/react";
 import { add } from 'ionicons/icons';
 
-export const ViewLayout = () => {
+export const View = () => {
 
     const [guns, setGuns] = useState<Gun[]>([]);
     const [selectCategory, setSelectCategory] = useState<string | undefined>('all');

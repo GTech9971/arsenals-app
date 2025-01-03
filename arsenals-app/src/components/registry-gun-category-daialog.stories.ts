@@ -1,5 +1,5 @@
 import { Meta, StoryObj } from "@storybook/react";
-import { RegistryGunCategoryDialog } from "../registry-gun-category-dialog";
+import { RegistryGunCategoryDialog } from "./registry-gun-category-dialog";
 
 const meta = {
     title: 'Arsenals/RegistryGunCategoryDialog',

@@ -1,11 +1,11 @@
 import { Meta, StoryObj } from "@storybook/react";
-import { ViewLayout } from "../layouts/view-layout";
+import { View } from "./view";
 
 const meta = {
-    title: 'Arsenals/Layouts/View',
-    component: ViewLayout,
+    title: 'Arsenals/Pages/View',
+    component: View,
     tags: ['autodocs'],
-} satisfies Meta<typeof ViewLayout>;
+} satisfies Meta<typeof View>;
 
 export default meta;
 

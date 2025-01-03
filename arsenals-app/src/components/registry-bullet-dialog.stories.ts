@@ -1,5 +1,5 @@
 import { Meta, StoryObj } from "@storybook/react";
-import { RegistryBulletDialog } from "../registry-bullet-dialog";
+import { RegistryBulletDialog } from "./registry-bullet-dialog";
 
 const meta = {
     title: 'Arsenals/RegistryBulletDialog',
