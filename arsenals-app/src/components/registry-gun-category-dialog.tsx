@@ -3,7 +3,17 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "@/lib/api-client";
 import { RegistryGunCategoryRequest, RegistryGunCategoryResponse } from "@gtech9971/arsenals.model";
-import { IonButton, IonButtons, IonContent, IonHeader, IonInput, IonItem, IonPage, IonTitle, IonToolbar } from "@ionic/react";
+import {
+    IonButton,
+    IonButtons,
+    IonContent,
+    IonHeader,
+    IonInput,
+    IonItem,
+    IonPage,
+    IonTitle,
+    IonToolbar
+} from "@ionic/react";
 
 const formSchema = z.object({
     name: z.string().nonempty({ message: 'カテゴリー名は必須です。' }),
@@ -59,9 +69,7 @@ export const RegistryGunCategoryDialog: React.FC<RegistryGunCategoryDialogProps>
                             placeholder="ハンドガン"
                             errorText={errors.name?.message}
                             className={`${errors.name ? 'ion-invalid' : 'ion-valid'}`}
-                            {...register('name', {
-                                required: 'カテゴリー名は必須です。',
-                            })}
+                            {...register('name')}
                         />
                     </IonItem>
 

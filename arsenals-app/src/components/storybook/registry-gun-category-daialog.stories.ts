@@ -4,9 +4,6 @@ import { RegistryGunCategoryDialog } from "../registry-gun-category-dialog";
 const meta = {
     title: 'Arsenals/RegistryGunCategoryDialog',
     component: RegistryGunCategoryDialog,
-    parameters: {
-        layout: 'centered'
-    },
     tags: ['autodocs'],
 } satisfies Meta<typeof RegistryGunCategoryDialog>;
 
