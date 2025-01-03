@@ -1,0 +1,10 @@
+/* For information on how to create your own theme, please see:
+http://ionicframework.com/docs/theming/ */
+
+.ion-invalid .error-text{
+    display: block !important;
+}
+
+.ion-valid .error-text{
+    display: none !important;
+}

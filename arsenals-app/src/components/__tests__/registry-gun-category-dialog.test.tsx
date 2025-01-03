@@ -24,8 +24,9 @@ describe("カテゴリー登録ダイアログ", () => {
         expect(screen.queryByText('カテゴリー登録')).not.toBeInTheDocument();
         await userEvent.click(openButton);
 
-        const input = screen.getByPlaceholderText<HTMLInputElement>('ハンドガン');
-        expect('', input.value);
+        const input = screen.getByPlaceholderText<HTMLIonInputElement>('ハンドガン');
+        const inputVal = input.value;
+        expect(inputVal).toBe('');
 
         const saveButton = screen.getByText('Save');
         await userEvent.click(saveButton);

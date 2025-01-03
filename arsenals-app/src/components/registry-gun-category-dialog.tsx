@@ -1,23 +1,9 @@
 import { z } from "zod"
-import { Button } from "./ui/button"
-import {
-    DialogActionTrigger,
-    DialogBody,
-    DialogContent,
-    DialogFooter,
-    DialogHeader,
-    DialogRoot,
-    DialogTitle,
-    DialogTrigger
-} from "./ui/dialog"
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Field } from "./ui/field";
-import { IconButton, Input } from "@chakra-ui/react";
-import { useState } from "react";
 import { api } from "@/lib/api-client";
 import { RegistryGunCategoryRequest, RegistryGunCategoryResponse } from "@gtech9971/arsenals.model";
-import { IoMdAdd } from "react-icons/io";
+import { IonButton, IonButtons, IonContent, IonHeader, IonInput, IonItem, IonPage, IonTitle, IonToolbar } from "@ionic/react";
 
 const formSchema = z.object({
     name: z.string().nonempty({ message: 'カテゴリー名は必須です。' }),
@@ -25,20 +11,21 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
-export const RegistryGunCategoryDialog = () => {
+export type RegistryGunCategoryDialogProps = {
+    dismiss: (data?: string | null | undefined, role?: string) => void
+}
 
-    const [isOpen, setIsOpen] = useState<boolean>(false);
-
+export const RegistryGunCategoryDialog: React.FC<RegistryGunCategoryDialogProps> = ({ dismiss, }) => {
     const {
         handleSubmit,
-        control,
-        formState
+        formState: { errors },
+        register,
     } = useForm<FormValues>({
         defaultValues: { name: '' },
         resolver: zodResolver(formSchema)
     });
 
-    const onSubmit = handleSubmit(async (data) => {
+    const onSubmit = (async (data: RegistryGunCategoryRequest) => {
         console.log(data);
         const request: RegistryGunCategoryRequest = {
             name: data.name
@@ -47,49 +34,40 @@ export const RegistryGunCategoryDialog = () => {
         api.post<RegistryGunCategoryResponse>('categories', request).then(response => {
             console.log(response);
         });
-        setIsOpen(false);
     });
 
     return (
-        <DialogRoot lazyMount placement='center' open={isOpen} onOpenChange={(e) => setIsOpen(e.open)}>
-            <DialogTrigger asChild>
-                <IconButton variant='subtle' data-testid="open">
-                    <IoMdAdd />
-                </IconButton>
-            </DialogTrigger>
+        <>
+            <IonPage>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <IonHeader>
+                        <IonToolbar>
+                            <IonTitle>カテゴリー登録</IonTitle>
+                            <IonButtons slot="start">
+                                <IonButton onClick={() => dismiss(null, 'cancel')}>Cancel</IonButton>
+                            </IonButtons>
 
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>カテゴリー登録</DialogTitle>
-                </DialogHeader>
-
-                <DialogBody>
-                    <form id="registryGunCategoryForm" noValidate onSubmit={onSubmit}>
-                        {/* カテゴリー名 */}
-                        <Controller
-                            control={control}
-                            name="name"
-                            render={({ field }) => (
-                                <Field label="カテゴリー名" required>
-                                    <Input placeholder="ハンドガン" {...field} />
-                                    {formState.errors.name && (
-                                        <span style={{ color: "red", fontSize: "12px" }}>
-                                            {formState.errors.name.message}
-                                        </span>
-                                    )}
-                                </Field>
-                            )}>
-                        </Controller>
-                    </form>
-                </DialogBody>
-
-                <DialogFooter>
-                    <DialogActionTrigger asChild>
-                        <Button variant="outline">Cancel</Button>
-                    </DialogActionTrigger>
-                    <Button form="registryGunCategoryForm" type="submit">Save</Button>
-                </DialogFooter>
-            </DialogContent>
-        </DialogRoot>
+                            <IonButtons slot="end">
+                                <IonButton type="submit">Save</IonButton>
+                            </IonButtons>
+                        </IonToolbar>
+                    </IonHeader>
+                    <IonContent>
+                        <IonItem lines="none">
+                            <IonInput
+                                label="カテゴリー名"
+                                labelPlacement="stacked"
+                                placeholder="ハンドガン"
+                                errorText={errors.name?.message}
+                                className={`${errors.name ? 'ion-invalid' : 'ion-valid'}`}
+                                {...register('name', {
+                                    required: 'カテゴリー名は必須です。',
+                                })}
+                            />
+                        </IonItem>
+                    </IonContent>
+                </form>
+            </IonPage>
+        </>
     )
 }
