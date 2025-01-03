@@ -22,7 +22,9 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import '../src/theme/variables.css';
 
-setupIonicReact();
+setupIonicReact({
+  mode: 'ios'
+});
 
 
 initialize({

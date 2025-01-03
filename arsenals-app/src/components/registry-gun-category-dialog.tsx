@@ -61,7 +61,7 @@ export const RegistryGunCategoryDialog: React.FC<RegistryGunCategoryDialogProps>
                         </IonButtons>
                     </IonToolbar>
                 </IonHeader>
-                <IonContent>
+                <IonContent fullscreen>
                     <IonItem lines="none">
                         <IonInput
                             label="カテゴリー名"

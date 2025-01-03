@@ -7,12 +7,13 @@ import { SegmentValue } from "@ionic/core";
 import { addOutline } from "ionicons/icons";
 
 export type GunCategorySegmentProp = {
-    onChange: (value: GunCategory | undefined) => void;
+    /** 選択したカテゴリーID */
+    onChange: (value?: string) => void;
 }
 
 export const GunCategorySegment: React.FC<GunCategorySegmentProp> = ({ onChange }) => {
 
-    const [selected, setSelected] = useState<GunCategory>({ id: 'all', name: 'すべて' });
+    const [selected, setSelected] = useState<string>('all');
     const [categories, setCategories] = useState<GunCategory[]>([{ id: 'all', name: 'すべて' }]);
     const [present, dismiss] = useIonModal(RegistryGunCategoryDialog, {
         dismiss: (data: string, role: string) => dismiss(data, role)
@@ -31,9 +32,9 @@ export const GunCategorySegment: React.FC<GunCategorySegmentProp> = ({ onChange 
     }, []);
 
 
-    const handleSegmentChange = ((value: SegmentValue | undefined) => {
+    const handleSegmentChange = ((value?: SegmentValue) => {
         if (!value) { return; }
-        const category: GunCategory = value as GunCategory;
+        const category: string = value as string;
         setSelected(category);
         onChange(category);
     });

@@ -4,9 +4,6 @@ import { ViewLayout } from "../layouts/view-layout";
 const meta = {
     title: 'Arsenals/Layouts/View',
     component: ViewLayout,
-    parameters: {
-        layout: 'centered'
-    },
     tags: ['autodocs'],
 } satisfies Meta<typeof ViewLayout>;
 

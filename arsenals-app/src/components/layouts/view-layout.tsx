@@ -1,17 +1,16 @@
-import { Grid, GridItem, VStack } from "@chakra-ui/react";
 import { GunCategorySegment } from "../gun-category-segment";
 import { GunCard } from "../gun-card";
 import { useCallback, useEffect, useState } from "react";
-import { FetchGunsResponse, Gun, GunCategory } from "@gtech9971/arsenals.model";
+import { FetchGunsResponse, Gun } from "@gtech9971/arsenals.model";
 import { api } from "@/lib/api-client";
-import { Fab } from "../ui/fab";
 import { ContentLayout } from "./content-layout";
-
+import { IonCol, IonFab, IonFabButton, IonGrid, IonIcon, IonRow } from "@ionic/react";
+import { add } from 'ionicons/icons';
 
 export const ViewLayout = () => {
 
     const [guns, setGuns] = useState<Gun[]>([]);
-    const [selectCategory, setSelectCategory] = useState<GunCategory | undefined>(undefined);
+    const [selectCategory, setSelectCategory] = useState<string | undefined>('all');
 
     // 初回実行時
     useEffect(() => {
@@ -26,9 +25,9 @@ export const ViewLayout = () => {
     useEffect(() => {
         if (!selectCategory) { return; }
 
-        const query: string = selectCategory.id === 'all'
+        const query: string = selectCategory === 'all'
             ? ``
-            : `?category=${selectCategory.id}`;
+            : `?category=${selectCategory}`;
 
         (async () => {
             const response = await api.get<FetchGunsResponse>(`guns${query}`)
@@ -39,32 +38,33 @@ export const ViewLayout = () => {
     }, [selectCategory]);
 
 
-    const onChangeCategory = useCallback((value: GunCategory | undefined) => {
+    const onChangeCategory = useCallback((value?: string) => {
         setSelectCategory(value);
     }, []);
 
-
-
     return (
-        <>
-            <ContentLayout title="Arsenals">
-                <VStack>
+        <ContentLayout title="Arsenals">
+            <IonGrid>
+                <IonRow>
+                    <IonCol>
+                        <GunCategorySegment onChange={onChangeCategory} />
+                    </IonCol>
+                </IonRow>
 
-                    <GunCategorySegment onChange={onChangeCategory} />
+                <IonRow>
+                    {guns.map((gun, index) => (
+                        <IonCol size="3">
+                            <GunCard key={index} {...gun} />
+                        </IonCol>
+                    ))}
+                </IonRow>
+            </IonGrid>
 
-                    <Grid templateColumns="repeat(3, 1fr)" gap="3" >
-                        {guns.map((gun, index) => (
-                            <GridItem key={index} >
-                                <GunCard {...gun} />
-                            </GridItem>
-                        ))}
-
-                    </Grid>
-
-                    <Fab />
-
-                </VStack>
-            </ContentLayout>
-        </>
+            <IonFab slot="fixed" horizontal="end" vertical="bottom">
+                <IonFabButton>
+                    <IonIcon icon={add} />
+                </IonFabButton>
+            </IonFab>
+        </ContentLayout>
     )
 }

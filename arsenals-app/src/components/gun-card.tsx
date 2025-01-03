@@ -1,5 +1,12 @@
 import { Gun } from "@gtech9971/arsenals.model";
-import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonImg } from "@ionic/react";
+import {
+    IonCard,
+    IonCardContent,
+    IonCardHeader,
+    IonCardSubtitle,
+    IonCardTitle,
+    IonImg
+} from "@ionic/react";
 
 export const GunCard = (props: Gun) => {
     return (
@@ -15,7 +22,7 @@ export const GunCard = (props: Gun) => {
 
             </IonCardHeader>
             <IonCardContent>
-                {props.capacity}
+                装弾数:{props.capacity}
             </IonCardContent>
         </IonCard>
     )
