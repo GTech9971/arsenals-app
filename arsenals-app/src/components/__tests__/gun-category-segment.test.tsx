@@ -3,6 +3,7 @@ import { GunCategorySegment } from "../gun-category-segment";
 import { GunCategory } from "@gtech9971/arsenals.model";
 import '@testing-library/jest-dom'
 import userEvent from "@testing-library/user-event";
+import { IonApp } from "@ionic/react";
 
 describe("銃カテゴリーセグメント", () => {
 
@@ -22,14 +23,19 @@ describe("銃カテゴリーセグメント", () => {
     });
 
     test("追加ボタン押下時に登録ダイアログが表示される", async () => {
-        render(<GunCategorySegment onChange={(value: GunCategory | undefined) => { console.debug(value) }} />)
+        render(
+            <IonApp>
+                <GunCategorySegment onChange={(value: GunCategory | undefined) => { console.debug(value) }} />
+            </IonApp>
+        );
 
         const openButton = screen.getByTestId('open');
         expect(screen.queryByText('カテゴリー登録')).not.toBeInTheDocument();
 
         await userEvent.click(openButton);
 
-        expect(screen.getByText('カテゴリー登録')).toBeInTheDocument();
+        const modalTest = await screen.findByText("カテゴリー登録");
+        expect(modalTest).toBeInTheDocument();
     });
 
 });

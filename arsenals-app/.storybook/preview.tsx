@@ -3,7 +3,7 @@ import { initialize, mswDecorator } from 'msw-storybook-addon';
 import { handlers } from '../src/testing/mocks/handlers';
 
 
-import { setupIonicReact } from "@ionic/react";
+import { IonApp, setupIonicReact } from "@ionic/react";
 //ionic フレームワークをstorybookに適応
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -42,7 +42,12 @@ const preview: Preview = {
     }
   },
   decorators: [
-    mswDecorator
+    mswDecorator,
+    (Story) => (
+      <IonApp>
+        <Story />
+      </IonApp>
+    )
   ],
 };
 

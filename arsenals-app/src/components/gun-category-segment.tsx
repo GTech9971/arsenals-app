@@ -2,9 +2,9 @@ import { api } from "@/lib/api-client";
 import { useEffect, useState } from "react";
 import { FetchGunCategoryResponse, GunCategory } from "@gtech9971/arsenals.model";
 import { RegistryGunCategoryDialog } from "./registry-gun-category-dialog";
-import { IonSegment, IonSegmentButton } from "@ionic/react";
+import { IonIcon, IonSegment, IonSegmentButton, useIonModal } from "@ionic/react";
 import { SegmentValue } from "@ionic/core";
-
+import { addOutline } from "ionicons/icons";
 
 export type GunCategorySegmentProp = {
     onChange: (value: GunCategory | undefined) => void;
@@ -14,6 +14,9 @@ export const GunCategorySegment: React.FC<GunCategorySegmentProp> = ({ onChange 
 
     const [selected, setSelected] = useState<GunCategory>({ id: 'all', name: 'すべて' });
     const [categories, setCategories] = useState<GunCategory[]>([{ id: 'all', name: 'すべて' }]);
+    const [present, dismiss] = useIonModal(RegistryGunCategoryDialog, {
+        dismiss: (data: string, role: string) => dismiss(data, role)
+    });
 
     useEffect(() => {
         const fetchData = async () => {
@@ -38,22 +41,20 @@ export const GunCategorySegment: React.FC<GunCategorySegmentProp> = ({ onChange 
     if (!categories) { return <div>Loading...</div> }
 
     return (
-        <>
-            <div style={{ flex: 'display' }}>
-                <IonSegment
-                    value={selected as SegmentValue}
-                    onIonChange={(e) => handleSegmentChange(e.detail.value)}>
-                    {categories.map((category, index) =>
-                    (
-                        <IonSegmentButton key={index} value={category.id}>
-                            {category.name}
-                        </IonSegmentButton>
-                    )
-                    )}
-                </IonSegment>
+        <IonSegment
+            value={selected as SegmentValue}
+            onIonChange={(e) => handleSegmentChange(e.detail.value)}>
+            {categories.map((category, index) =>
+            (
+                <IonSegmentButton key={index} value={category.id}>
+                    {category.name}
+                </IonSegmentButton>
+            )
+            )}
 
-                <RegistryGunCategoryDialog />
-            </div>
-        </>
+            <IonSegmentButton data-testid="open" onClick={() => present()}>
+                <IonIcon icon={addOutline} />
+            </IonSegmentButton>
+        </IonSegment>
     )
 }

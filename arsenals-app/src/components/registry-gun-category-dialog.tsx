@@ -37,37 +37,36 @@ export const RegistryGunCategoryDialog: React.FC<RegistryGunCategoryDialogProps>
     });
 
     return (
-        <>
-            <IonPage>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <IonHeader>
-                        <IonToolbar>
-                            <IonTitle>カテゴリー登録</IonTitle>
-                            <IonButtons slot="start">
-                                <IonButton onClick={() => dismiss(null, 'cancel')}>Cancel</IonButton>
-                            </IonButtons>
+        <IonPage>
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <IonHeader>
+                    <IonToolbar>
+                        <IonTitle>カテゴリー登録</IonTitle>
+                        <IonButtons slot="start">
+                            <IonButton onClick={() => dismiss(null, 'cancel')}>Cancel</IonButton>
+                        </IonButtons>
 
-                            <IonButtons slot="end">
-                                <IonButton type="submit">Save</IonButton>
-                            </IonButtons>
-                        </IonToolbar>
-                    </IonHeader>
-                    <IonContent>
-                        <IonItem lines="none">
-                            <IonInput
-                                label="カテゴリー名"
-                                labelPlacement="stacked"
-                                placeholder="ハンドガン"
-                                errorText={errors.name?.message}
-                                className={`${errors.name ? 'ion-invalid' : 'ion-valid'}`}
-                                {...register('name', {
-                                    required: 'カテゴリー名は必須です。',
-                                })}
-                            />
-                        </IonItem>
-                    </IonContent>
-                </form>
-            </IonPage>
-        </>
+                        <IonButtons slot="end">
+                            <IonButton type="submit">Save</IonButton>
+                        </IonButtons>
+                    </IonToolbar>
+                </IonHeader>
+                <IonContent>
+                    <IonItem lines="none">
+                        <IonInput
+                            label="カテゴリー名"
+                            labelPlacement="stacked"
+                            placeholder="ハンドガン"
+                            errorText={errors.name?.message}
+                            className={`${errors.name ? 'ion-invalid' : 'ion-valid'}`}
+                            {...register('name', {
+                                required: 'カテゴリー名は必須です。',
+                            })}
+                        />
+                    </IonItem>
+
+                </IonContent>
+            </form>
+        </IonPage>
     )
 }

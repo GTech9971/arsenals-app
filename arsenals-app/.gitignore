@@ -28,3 +28,5 @@ dist-ssr
 *storybook.log
 
 .DS_Store
+
+storybook-static
