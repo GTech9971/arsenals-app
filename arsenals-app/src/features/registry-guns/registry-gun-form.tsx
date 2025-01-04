@@ -1,5 +1,5 @@
 import { api } from "@/lib/api-client";
-import { Bullet, FetchBulletsResponse, FetchGunCategoryResponse, GunCategory, RegistryGunRequest, RegistryGunResponse } from "@gtech9971/arsenals.model";
+import { Bullet, FetchBulletsResponse, FetchGunCategoryResponse, Gun, GunCategory, RegistryGunRequest, RegistryGunResponse } from "@gtech9971/arsenals.model";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
     IonButton,
@@ -7,7 +7,6 @@ import {
     IonCol,
     IonGrid,
     IonIcon,
-    IonImg,
     IonInput,
     IonItem,
     IonList,
@@ -38,19 +37,22 @@ const formSchema = z.object({
             .min(1, "装弾数は1以上です。")
             .max(5000, "装弾数は5000以下です。")
     ),
-
     useBullets: z.array(z.string())
+        .optional(),
+    imageUrl: z.string()
+        .url("銃画像のURL形式が不正です。")
         .optional()
 });
 
-type FormValues = z.infer<typeof formSchema>;
+type RegistryGunFormValues = z.infer<typeof formSchema>;
 
 export type RegistryGunFormProps = {
     formId?: string,
     showSubmit?: boolean,
+    setGun?: React.Dispatch<React.SetStateAction<Gun | undefined>>
 }
 
-export const RegistryGunForm: React.FC<RegistryGunFormProps> = ({ formId, showSubmit }) => {
+export const RegistryGunForm: React.FC<RegistryGunFormProps> = ({ formId, showSubmit, setGun }) => {
 
     const [categories, setCategories] = useState<GunCategory[]>([]);
     const [bullets, setBullets] = useState<Bullet[]>([]);
@@ -66,13 +68,14 @@ export const RegistryGunForm: React.FC<RegistryGunFormProps> = ({ formId, showSu
         register,
         setValue,
         watch,
-    } = useForm<FormValues>({
+    } = useForm<RegistryGunFormValues>({
         defaultValues: { name: '', categoryId: '', capacity: undefined, useBullets: [] },
         resolver: zodResolver(formSchema)
     });
 
     const selectBullets: string[] | undefined = watch('useBullets');
 
+    // 初回実行時
     useEffect(() => {
         (async () => {
             const response = await api.get<FetchGunCategoryResponse>("categories");
@@ -87,6 +90,28 @@ export const RegistryGunForm: React.FC<RegistryGunFormProps> = ({ formId, showSu
         })();
     }, []);
 
+    // 入力のたびに外部に渡す
+    useEffect(() => {
+        if (!setGun) { return; }
+        const { unsubscribe } = watch((value) => {
+            const category: GunCategory | undefined = categories.find(x => x.id === value.categoryId);
+
+            const gun: Gun = {
+                ...value,
+                name: value.name ?? '',
+                category: category,
+                capacity: value.capacity ?? 0,
+                bullets: value.useBullets
+                    ? value.useBullets.map(x => bullets.find(y => y.id === x) as Bullet)
+                    : [],
+                imageUrl: value.imageUrl
+            };
+            setGun(gun);
+        });
+        return () => unsubscribe();
+    }, [watch, setGun, bullets, categories]);
+
+    // 使用弾丸のチェック切り替え
     const toggleUseBullet = (bulletId: string) => {
         if (!selectBullets) { throw Error(); }
         const newVal = selectBullets.includes(bulletId)
@@ -95,7 +120,7 @@ export const RegistryGunForm: React.FC<RegistryGunFormProps> = ({ formId, showSu
         setValue('useBullets', newVal);
     }
 
-    const onSubmit = ((data: FormValues) => {
+    const onSubmit = ((data: RegistryGunFormValues) => {
         const request: RegistryGunRequest = {
             name: data.name,
             categoryId: data.categoryId,
@@ -114,11 +139,8 @@ export const RegistryGunForm: React.FC<RegistryGunFormProps> = ({ formId, showSu
         <form id={formId} onSubmit={handleSubmit(onSubmit)}>
             <IonGrid>
                 <IonRow>
-                    <IonCol size="6">
-                        <IonImg />
-                    </IonCol>
 
-                    <IonCol size="6">
+                    <IonCol>
                         <IonList>
                             <IonItem>
                                 <IonInput
@@ -127,8 +149,7 @@ export const RegistryGunForm: React.FC<RegistryGunFormProps> = ({ formId, showSu
                                     placeholder="G3A1"
                                     errorText={errors.name?.message}
                                     className={`${errors.name ? 'ion-invalid' : 'ion-valid'}`}
-                                    {...register('name')}
-                                />
+                                    {...register('name')} />
                             </IonItem>
 
                             <IonItem>
@@ -169,6 +190,16 @@ export const RegistryGunForm: React.FC<RegistryGunFormProps> = ({ formId, showSu
                                     {...register('capacity')} />
                             </IonItem>
 
+                            <IonItem lines="none">
+                                <IonInput
+                                    type="url"
+                                    label="銃画像"
+                                    labelPlacement="stacked"
+                                    placeholder="https://guns.images.com/g3a1.jpeg"
+                                    errorText={`${errors.imageUrl?.message}`}
+                                    className={`${errors.imageUrl ? 'ion-invalid' : 'ion-valid'}`}
+                                    {...register('imageUrl')} />
+                            </IonItem>
                         </IonList>
                     </IonCol>
                 </IonRow>
