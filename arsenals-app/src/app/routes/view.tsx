@@ -6,9 +6,10 @@ import { api } from "@/lib/api-client";
 import { ContentLayout } from "../../components/layouts/content-layout";
 import { IonCol, IonFab, IonFabButton, IonGrid, IonIcon, IonRow } from "@ionic/react";
 import { add } from 'ionicons/icons';
+import { useHistory } from "react-router";
 
 export const View = () => {
-
+    const history = useHistory();
     const [guns, setGuns] = useState<Gun[]>([]);
     const [selectCategory, setSelectCategory] = useState<string | undefined>('all');
 
@@ -53,7 +54,7 @@ export const View = () => {
 
                 <IonRow>
                     {guns.map((gun, index) => (
-                        <IonCol size="3">
+                        <IonCol key={index} size="3">
                             <GunCard key={index} {...gun} />
                         </IonCol>
                     ))}
@@ -61,7 +62,7 @@ export const View = () => {
             </IonGrid>
 
             <IonFab slot="fixed" horizontal="end" vertical="bottom">
-                <IonFabButton>
+                <IonFabButton onClick={() => history.push('/registry')}>
                     <IonIcon icon={add} />
                 </IonFabButton>
             </IonFab>

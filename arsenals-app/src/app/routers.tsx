@@ -1,16 +1,20 @@
 import { Route, Switch, } from "react-router-dom"
-import Home from "./routes/home";
 import { LoginCallback, } from "@okta/okta-react";
-import { Protected } from "./routes/protected";
 import { SecureRoute } from "./secure-route";
+import { View } from "./routes/view";
+import { RegistryGun } from "./routes/registry-gun";
+// import { Home } from "./routes/home";
 
 const AppRouters = () => {
 
     return (
         <Switch>
-            <Route path="/" exact component={Home} />
+            {/* <Route path="/" exact component={Home} /> */}
+            <SecureRoute path="/" exact component={View} />
+            <SecureRoute path="/view" component={View} />
             <Route path="/login/callback" render={() => (<LoginCallback />)} />
-            <SecureRoute path="/protected" component={Protected} />
+
+            <SecureRoute path="/registry" component={RegistryGun} />
         </Switch>
     )
 }
