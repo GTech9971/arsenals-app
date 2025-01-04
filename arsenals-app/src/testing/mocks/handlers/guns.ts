@@ -1,5 +1,5 @@
 import { env } from "@/config/env";
-import { FetchGunsResponse, Gun } from "@gtech9971/arsenals.model";
+import { FetchGunsResponse, Gun, RegistryGunResponse } from "@gtech9971/arsenals.model";
 import { http, HttpResponse } from "msw";
 import { DummyBulletC } from "./bullets";
 import { DummyCategoryA, DummyCategoryB } from "./categories";
@@ -27,6 +27,14 @@ export const gunsHandlers = [
             error: undefined,
             data: data
         }, { status: 200 })
+    }),
+
+    // 登録
+    http.post(`${env.API_URL}/guns`, async ({ request }) => {
+        return HttpResponse.json<RegistryGunResponse>({
+            error: undefined,
+            data: { id: 'G-1000' }
+        }, { status: 201 })
     }),
 ];
 
