@@ -8,8 +8,12 @@ const createEnv = () => {
             .refine((s) => s === 'true' || s === 'false')
             .transform((s) => s === 'true')
             .optional(),
-        APP_URL: z.string().optional().default('http://localhost:3000'),
-        APP_MOCK_API_PORT: z.string().optional().default('8080'),
+        APP_URL: z.string().optional(),
+        APP_MOCK_API_PORT: z.string().optional(),
+
+        OKTA_ISSUER: z.string(),
+        OKTA_CLIENTID: z.string(),
+        OKTA_REDIRECTURI: z.string()
     });
 
     const envVars = Object.entries(import.meta.env).reduce<

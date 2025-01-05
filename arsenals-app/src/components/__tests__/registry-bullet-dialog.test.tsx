@@ -69,8 +69,8 @@ describe("弾丸登録ダイアログ", () => {
         const inputBullet = screen.getByPlaceholderText<HTMLInputElement>('9mm');
         await userEvent.type(inputBullet, "45ACP");
 
-        const inputDamage = screen.getByLabelText<HTMLInputElement>('ダメージ');
-        await userEvent.type(inputDamage, "0");
+        const inputDamage = screen.getByTestId<HTMLInputElement>('input-damage');
+        await userEvent.type(inputDamage, "-10");
 
         const saveButton = screen.getByText('Save');
         await userEvent.click(saveButton);

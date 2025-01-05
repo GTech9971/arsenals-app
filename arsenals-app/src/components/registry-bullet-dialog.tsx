@@ -22,7 +22,6 @@ const formSchema = z.object({
         .nonempty({ message: '弾丸名は必須です。' }),
     damage: z.preprocess((val) => parseInt(val as string),
         z.number({ message: 'ダメージは数字で入力してください。' })
-            .nonnegative({ message: "ダメージは1以上です。" })
             .min(1, "ダメージは1以上です。")
             .max(5000, "ダメージは5000以下です。"))
 });
@@ -90,6 +89,7 @@ export const RegistryBulletDialog: React.FC<RegistryBulletDialogProps> = ({ dism
                                 errorText={errors.damage?.message}
                                 className={`${errors.damage ? 'ion-invalid' : 'ion-valid'}`}
                                 {...register('damage')}
+                                data-testid="input-damage"
                             />
                         </IonItem>
 

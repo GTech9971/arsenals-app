@@ -1,11 +1,12 @@
-import { useOktaAuth } from '@okta/okta-react';
-import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCol, IonGrid, IonList, IonRow, } from '@ionic/react';
+import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonGrid, IonList, IonRow, } from '@ionic/react';
 import { ContentLayout } from '@/components/layouts/content-layout';
 import { CSSProperties } from 'react';
 
 export const Home = () => {
-  const { authState, oktaAuth } = useOktaAuth();
-  const handleLogin = () => oktaAuth.signInWithRedirect();
+
+  console.log("home");
+  // const { authState, oktaAuth } = useOktaAuth();
+  // const handleLogin = () => oktaAuth.signInWithRedirect();
 
   const center: CSSProperties = {
     display: 'flex',
@@ -29,7 +30,7 @@ export const Home = () => {
                 </IonList>
               </IonRow>
               <IonRow style={center}>
-                <IonButton size='large' shape='round' onClick={handleLogin}>ログイン</IonButton>
+                <IonButton size='large' shape='round' >ログイン</IonButton>
               </IonRow>
             </IonGrid>
 
