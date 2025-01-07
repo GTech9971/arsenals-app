@@ -36,7 +36,6 @@ import '@ionic/react/css/palettes/dark.system.css';
 /* Theme variables */
 import '../theme/variables.css';
 
-
 const oktaAuth = new OktaAuth(oktaConfig);
 
 setupIonicReact();
@@ -57,7 +56,8 @@ const SecurityWrapper = () => {
 export const App = () => {
     return (
         <IonApp>
-            <IonReactRouter>
+            {/* エイリアス付きでアクセスする場合必要 */}
+            <IonReactRouter basename={import.meta.env.BASE_URL}>
                 <IonRouterOutlet>
                     <SecurityWrapper />
                 </IonRouterOutlet>

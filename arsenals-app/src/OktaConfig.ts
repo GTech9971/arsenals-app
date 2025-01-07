@@ -1,6 +1,8 @@
-const issuer = import.meta.env.VITE_OKTA_ISSUER;
-const clientId = import.meta.env.VITE_OKTA_CLIENTID;
-const redirectUri = import.meta.env.VITE_OKTA_REDIRECTURI;
+import { env } from "./config/env";
+
+const issuer = env.OKTA_ISSUER;
+const clientId = env.OKTA_CLIENTID;
+const redirectUri = env.OKTA_REDIRECTURI;
 
 export interface OktaConfig {
     issuer: string;
