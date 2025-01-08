@@ -35,6 +35,7 @@ import '@ionic/react/css/palettes/dark.system.css';
 
 /* Theme variables */
 import '../theme/variables.css';
+import { env } from "@/config/env";
 
 const oktaAuth = new OktaAuth(oktaConfig);
 
@@ -57,7 +58,7 @@ export const App = () => {
     return (
         <IonApp>
             {/* エイリアス付きでアクセスする場合必要 */}
-            <IonReactRouter basename={import.meta.env.BASE_URL}>
+            <IonReactRouter basename={env.ENABLE_API_MOCKING ? undefined : import.meta.env.BASE_URL}>
                 <IonRouterOutlet>
                     <SecurityWrapper />
                 </IonRouterOutlet>
