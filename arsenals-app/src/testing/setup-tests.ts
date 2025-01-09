@@ -1,9 +1,11 @@
 import '@testing-library/jest-dom/vitest';
-
 import { server } from '@/testing/mocks/server';
 import { afterAll, afterEach, beforeAll, beforeEach, vi } from 'vitest';
+import { setupIonicReact } from '@ionic/react';
 
 vi.mock('zustand');
+
+setupIonicReact();
 
 // CSSパースエラーを無視
 const originalConsoleError = console.error;

@@ -26,7 +26,7 @@ import { RegistryBulletDialog } from "@/components/registry-bullet-dialog";
 
 const formSchema = z.object({
     name: z.string()
-        .nonempty("名前は1文字以上です。")
+        .nonempty("名前は必須です。")
         .min(1, "名前は1文字以上です。")
         .max(20, "名前は20文字以下です。"),
     categoryId: z.string()
@@ -40,7 +40,6 @@ const formSchema = z.object({
     useBullets: z.array(z.string())
         .optional(),
     imageUrl: z.string()
-        .url("銃画像のURL形式が不正です。")
         .optional()
 });
 
@@ -53,7 +52,7 @@ export type RegistryGunFormProps = {
 }
 
 export const RegistryGunForm: React.FC<RegistryGunFormProps> = ({ formId, showSubmit, setGun }) => {
-
+    // console.log("Hello");
     const [categories, setCategories] = useState<GunCategory[]>([]);
     const [bullets, setBullets] = useState<Bullet[]>([]);
     const [present] = useIonToast();
@@ -69,7 +68,7 @@ export const RegistryGunForm: React.FC<RegistryGunFormProps> = ({ formId, showSu
         setValue,
         watch,
     } = useForm<RegistryGunFormValues>({
-        defaultValues: { name: '', categoryId: '', capacity: undefined, useBullets: [] },
+        defaultValues: { name: '', categoryId: '', capacity: undefined, imageUrl: '', useBullets: [] },
         resolver: zodResolver(formSchema)
     });
 
@@ -144,7 +143,9 @@ export const RegistryGunForm: React.FC<RegistryGunFormProps> = ({ formId, showSu
                         <IonList>
                             <IonItem>
                                 <IonInput
+                                    type="text"
                                     label="名前"
+                                    role="textbox"
                                     labelPlacement="stacked"
                                     placeholder="G3A1"
                                     errorText={errors.name?.message}
@@ -159,6 +160,8 @@ export const RegistryGunForm: React.FC<RegistryGunFormProps> = ({ formId, showSu
                                     render={({ field }) => (
                                         <IonSelect
                                             label="カテゴリー"
+                                            role='combobox'
+                                            name="categoryId"
                                             labelPlacement="stacked"
                                             placeholder="ハンドガン"
                                             className={`${errors.categoryId ? 'ion-invalid' : 'ion-valid'}`}
@@ -166,7 +169,7 @@ export const RegistryGunForm: React.FC<RegistryGunFormProps> = ({ formId, showSu
                                             onIonChange={e => setValue('categoryId', e.detail.value)}>
 
                                             {categories.map((category, index) => (
-                                                <IonSelectOption key={index} value={category.id}>
+                                                <IonSelectOption role='option' key={index} value={category.id}>
                                                     {category.name}
                                                 </IonSelectOption>
                                             ))}
@@ -176,13 +179,14 @@ export const RegistryGunForm: React.FC<RegistryGunFormProps> = ({ formId, showSu
                                 <ErrorMessage
                                     errors={errors}
                                     name="categoryId"
-                                    as={<div style={{ color: 'red', fontSize: 'small' }} />} />
+                                    as={<div style={{ color: 'red', fontSize: 'small' }} className="hello" />} />
                             </IonItem>
 
                             <IonItem>
                                 <IonInput
                                     type="number"
                                     label="装弾数"
+                                    role="textbox"
                                     labelPlacement="stacked"
                                     placeholder="30"
                                     errorText={errors.capacity?.message}
@@ -194,6 +198,7 @@ export const RegistryGunForm: React.FC<RegistryGunFormProps> = ({ formId, showSu
                                 <IonInput
                                     type="url"
                                     label="銃画像"
+                                    role="textbox"
                                     labelPlacement="stacked"
                                     placeholder="https://guns.images.com/g3a1.jpeg"
                                     errorText={`${errors.imageUrl?.message}`}
