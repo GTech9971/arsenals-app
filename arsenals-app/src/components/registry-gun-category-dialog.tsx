@@ -12,7 +12,8 @@ import {
     IonItem,
     IonPage,
     IonTitle,
-    IonToolbar
+    IonToolbar,
+    useIonToast
 } from "@ionic/react";
 
 const formSchema = z.object({
@@ -22,10 +23,13 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 export type RegistryGunCategoryDialogProps = {
-    dismiss: (data?: string | null | undefined, role?: string) => void
+    dismiss: (data?: string | null | undefined, role?: 'cancel' | 'confirm') => void
 }
 
 export const RegistryGunCategoryDialog: React.FC<RegistryGunCategoryDialogProps> = ({ dismiss, }) => {
+
+    const [present] = useIonToast();
+
     const {
         handleSubmit,
         formState: { errors },
@@ -36,14 +40,11 @@ export const RegistryGunCategoryDialog: React.FC<RegistryGunCategoryDialogProps>
     });
 
     const onSubmit = (async (data: RegistryGunCategoryRequest) => {
-        console.log(data);
-        const request: RegistryGunCategoryRequest = {
-            name: data.name
-        };
+        const request: RegistryGunCategoryRequest = { name: data.name };
 
-        api.post<RegistryGunCategoryResponse>('categories', request).then(response => {
-            console.log(response);
-        });
+        const response = await api.post<RegistryGunCategoryResponse>('categories', request);
+        await present(`カテゴリーを登録しました。${response.data.data?.id}`);
+        dismiss(null, 'confirm');
     });
 
     return (
@@ -66,6 +67,7 @@ export const RegistryGunCategoryDialog: React.FC<RegistryGunCategoryDialogProps>
                         <IonInput
                             label="カテゴリー名"
                             labelPlacement="stacked"
+                            role="textbox"
                             placeholder="ハンドガン"
                             errorText={errors.name?.message}
                             className={`${errors.name ? 'ion-invalid' : 'ion-valid'}`}

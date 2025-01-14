@@ -16,18 +16,24 @@ export const GunCategorySegment: React.FC<GunCategorySegmentProp> = ({ onChange 
     const [selected, setSelected] = useState<string>('all');
     const [categories, setCategories] = useState<GunCategory[]>([{ id: 'all', name: 'すべて' }]);
     const [present, dismiss] = useIonModal(RegistryGunCategoryDialog, {
-        dismiss: (data: string, role: string) => dismiss(data, role)
+        dismiss: (data: string, role: string) => {
+            dismiss(data, role);
+            if (role === 'confirm') {
+                fetchData();
+            }
+        }
     });
 
-    useEffect(() => {
-        const fetchData = async () => {
-            const response = await api.get<FetchGunCategoryResponse>('/categories');
-            if (response.data.data) {
-                const category: GunCategory[] = response.data.data;
-                setCategories([{ id: 'all', name: 'すべて' }, ...category]);
-            }
-        };
+    // 銃カテゴリー取得
+    const fetchData = async () => {
+        const response = await api.get<FetchGunCategoryResponse>('/categories');
+        if (response.data.data) {
+            const category: GunCategory[] = response.data.data;
+            setCategories([{ id: 'all', name: 'すべて' }, ...category]);
+        }
+    };
 
+    useEffect(() => {
         fetchData();
     }, []);
 
@@ -38,6 +44,11 @@ export const GunCategorySegment: React.FC<GunCategorySegmentProp> = ({ onChange 
         setSelected(category);
         onChange(category);
     });
+
+    const onClickAddButton = async () => {
+        await present();
+    };
+
 
     if (!categories) { return <div>Loading...</div> }
 
@@ -53,7 +64,7 @@ export const GunCategorySegment: React.FC<GunCategorySegmentProp> = ({ onChange 
             )
             )}
 
-            <IonSegmentButton data-testid="open" onClick={() => present()}>
+            <IonSegmentButton data-testid="open" onClick={onClickAddButton}>
                 <IonIcon icon={addOutline} />
             </IonSegmentButton>
         </IonSegment>
