@@ -1,5 +1,5 @@
 import { api } from "@/lib/api-client";
-import { Bullet, FetchBulletsResponse, FetchGunCategoryResponse, Gun, GunCategory, RegistryGunRequest, RegistryGunResponse } from "@gtech9971/arsenals.model";
+import { Bullet, FetchBulletsResponse, FetchGunCategoryResponse, Gun, GunCategory, RegistryGunRequest, RegistryGunResponse, UploadGunImageResponse } from "@gtech9971/arsenals.model";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
     IonButton,
@@ -23,6 +23,7 @@ import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { ErrorMessage } from '@hookform/error-message';
 import { RegistryBulletDialog } from "@/components/registry-bullet-dialog";
+import { useImgDl } from "@/hooks/use-img-dl";
 
 const formSchema = z.object({
     name: z.string()
@@ -52,13 +53,13 @@ export type RegistryGunFormProps = {
 }
 
 export const RegistryGunForm: React.FC<RegistryGunFormProps> = ({ formId, showSubmit, setGun }) => {
-    // console.log("Hello");
     const [categories, setCategories] = useState<GunCategory[]>([]);
     const [bullets, setBullets] = useState<Bullet[]>([]);
     const [present] = useIonToast();
     const [presentDialog, dismiss] = useIonModal(RegistryBulletDialog, {
         dismiss: (data: string, role: string) => dismiss(data, role)
     });
+    const { download, file2formData } = useImgDl();
 
     const {
         control,
@@ -119,7 +120,7 @@ export const RegistryGunForm: React.FC<RegistryGunFormProps> = ({ formId, showSu
         setValue('useBullets', newVal);
     }
 
-    const onSubmit = ((data: RegistryGunFormValues) => {
+    const onSubmit = (async (data: RegistryGunFormValues) => {
         const request: RegistryGunRequest = {
             name: data.name,
             categoryId: data.categoryId,
@@ -128,10 +129,16 @@ export const RegistryGunForm: React.FC<RegistryGunFormProps> = ({ formId, showSu
         };
         console.log(request);
 
-        api.post<RegistryGunResponse>("guns", request).then(response => {
-            console.log(response);
-            present('銃を登録しました。')
-        });
+        const response = await api.post<RegistryGunResponse>("guns", request);
+        await present(`銃を登録しました:${response.data.data?.id}`);
+
+        // 銃の画像も設定していた場合、続けて画像を登録する
+        if (data.imageUrl) {
+            const file = await download(data.imageUrl, response.data.data!.id);
+            const form = file2formData('data', file);
+            const registryImgResponse = await api.post<UploadGunImageResponse>(`guns/${response.data.data?.id}`, form);
+            await present(`画像を登録しました:${registryImgResponse.data.data?.url}`);
+        }
     });
 
     return (
