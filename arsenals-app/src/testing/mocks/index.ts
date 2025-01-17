@@ -5,9 +5,7 @@ export const enableMocking = async () => {
         const { worker } = await import('./browser');
         return worker.start({
             serviceWorker: {
-                url: env.ENABLE_API_MOCKING
-                    ? '/mockServiceWorker.js'
-                    : `${import.meta.env.BASE_URL}/mockServiceWorker.js`
+                url: '/mockServiceWorker.js'
             }
         });
     }

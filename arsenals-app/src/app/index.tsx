@@ -35,7 +35,6 @@ import '@ionic/react/css/palettes/dark.system.css';
 
 /* Theme variables */
 import '../theme/variables.css';
-import { env } from "@/config/env";
 
 const oktaAuth = new OktaAuth(oktaConfig);
 
@@ -47,7 +46,7 @@ const SecurityWrapper = () => {
     const restoreOriginalUri = (_oktaAuth: unknown, originalUri: string) => {
         let url: string = toRelativeUrl(originalUri || '/', window.location.origin);
         // エイリアス設定を行なっていた場合、/ドメイン名/ドメイン名/のようにURLが書き換えられるので防止
-        if (env.ENABLE_API_MOCKING === false && url === `${import.meta.env.BASE_URL}`) { url = '/'; }
+        if (import.meta.env.MODE === 'production' && url === `${import.meta.env.BASE_URL}`) { url = '/'; }
         history.replace(url);
     };
     return (
@@ -61,7 +60,7 @@ export const App = () => {
     return (
         <IonApp>
             {/* エイリアス付きでアクセスする場合必要 */}
-            <IonReactRouter basename={env.ENABLE_API_MOCKING ? undefined : import.meta.env.BASE_URL}>
+            <IonReactRouter basename={import.meta.env.MODE === 'development' ? undefined : import.meta.env.BASE_URL}>
                 <IonRouterOutlet>
                     <SecurityWrapper />
                 </IonRouterOutlet>
