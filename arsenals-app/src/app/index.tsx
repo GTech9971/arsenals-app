@@ -45,7 +45,10 @@ setupIonicReact();
 const SecurityWrapper = () => {
     const history = useHistory();
     const restoreOriginalUri = (_oktaAuth: unknown, originalUri: string) => {
-        history.replace(toRelativeUrl(originalUri || '/', window.location.origin));
+        let url: string = toRelativeUrl(originalUri || '/', window.location.origin);
+        // エイリアス設定を行なっていた場合、/ドメイン名/ドメイン名/のようにURLが書き換えられるので防止
+        if (env.ENABLE_API_MOCKING === false && url === `${import.meta.env.BASE_URL}`) { url = '/'; }
+        history.replace(url);
     };
     return (
         <Security oktaAuth={oktaAuth} restoreOriginalUri={restoreOriginalUri}>
