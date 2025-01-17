@@ -11,7 +11,7 @@ export const SecureRoute: React.FC<RouteProps> = ({ ...routeProps }) => {
     const { oktaAuth, authState } = useOktaAuth();
     const match = useRouteMatch();
     const isPending = React.useRef(false);
-    const [error, setError] = useState<Error | null>(null);
+    const [error] = useState<Error | null>(null);
 
     useEffect(() => {
         if (!match) { return; }

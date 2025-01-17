@@ -3,7 +3,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { RegistryBulletRequest, RegistryBulletResponse } from "@gtech9971/arsenals.model";
-import { api } from "@/lib/api-client";
+import apiClient from "@/lib/api-client";
 import {
     IonButton,
     IonButtons,
@@ -48,7 +48,7 @@ export const RegistryBulletDialog: React.FC<RegistryBulletDialogProps> = ({ dism
             damage: data.damage
         };
         console.log(request);
-        api.post<RegistryBulletResponse>("bullets", request).then(response => {
+        apiClient.post<RegistryBulletResponse>("bullets", request).then(response => {
             console.log(response);
         });
     });

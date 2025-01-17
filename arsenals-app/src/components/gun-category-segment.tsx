@@ -1,4 +1,4 @@
-import { api } from "@/lib/api-client";
+import apiClient from "@/lib/api-client";
 import { useEffect, useState } from "react";
 import { FetchGunCategoryResponse, GunCategory } from "@gtech9971/arsenals.model";
 import { RegistryGunCategoryDialog } from "./registry-gun-category-dialog";
@@ -26,7 +26,7 @@ export const GunCategorySegment: React.FC<GunCategorySegmentProp> = ({ onChange 
 
     // 銃カテゴリー取得
     const fetchData = async () => {
-        const response = await api.get<FetchGunCategoryResponse>('/categories');
+        const response = await apiClient.get<FetchGunCategoryResponse>('/categories');
         if (response.data.data) {
             const category: GunCategory[] = response.data.data;
             setCategories([{ id: 'all', name: 'すべて' }, ...category]);

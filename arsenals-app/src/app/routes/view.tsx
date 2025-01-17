@@ -2,7 +2,7 @@ import { GunCategorySegment } from "../../components/gun-category-segment";
 import { GunCard } from "../../components/gun-card";
 import { useCallback, useEffect, useState } from "react";
 import { FetchGunsResponse, Gun } from "@gtech9971/arsenals.model";
-import { api } from "@/lib/api-client";
+import apiClient from "@/lib/api-client";
 import { ContentLayout } from "../../components/layouts/content-layout";
 import { IonCol, IonFab, IonFabButton, IonGrid, IonIcon, IonRow } from "@ionic/react";
 import { add } from 'ionicons/icons';
@@ -16,7 +16,7 @@ export const View = () => {
     // 初回実行時
     useEffect(() => {
         (async () => {
-            const response = await api.get<FetchGunsResponse>('guns');
+            const response = await apiClient.get<FetchGunsResponse>('guns');
             if (response.data.data) {
                 setGuns(response.data.data);
             }
@@ -31,7 +31,7 @@ export const View = () => {
             : `?category=${selectCategory}`;
 
         (async () => {
-            const response = await api.get<FetchGunsResponse>(`guns${query}`)
+            const response = await apiClient.get<FetchGunsResponse>(`guns${query}`)
             if (response.data.data) {
                 setGuns(response.data.data);
             }

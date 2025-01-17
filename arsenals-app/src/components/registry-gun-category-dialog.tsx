@@ -1,7 +1,7 @@
 import { z } from "zod"
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { api } from "@/lib/api-client";
+import apiClient from "@/lib/api-client";
 import { RegistryGunCategoryRequest, RegistryGunCategoryResponse } from "@gtech9971/arsenals.model";
 import {
     IonButton,
@@ -42,7 +42,7 @@ export const RegistryGunCategoryDialog: React.FC<RegistryGunCategoryDialogProps>
     const onSubmit = (async (data: RegistryGunCategoryRequest) => {
         const request: RegistryGunCategoryRequest = { name: data.name };
 
-        const response = await api.post<RegistryGunCategoryResponse>('categories', request);
+        const response = await apiClient.post<RegistryGunCategoryResponse>('categories', request);
         await present(`カテゴリーを登録しました。${response.data.data?.id}`);
         dismiss(null, 'confirm');
     });

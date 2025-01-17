@@ -1,4 +1,4 @@
-import { api } from "@/lib/api-client";
+import apiClient from "@/lib/api-client";
 import { Bullet, FetchBulletsResponse, FetchGunCategoryResponse, Gun, GunCategory, RegistryGunRequest, RegistryGunResponse, UploadGunImageResponse } from "@gtech9971/arsenals.model";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -78,13 +78,13 @@ export const RegistryGunForm: React.FC<RegistryGunFormProps> = ({ formId, showSu
     // 初回実行時
     useEffect(() => {
         (async () => {
-            const response = await api.get<FetchGunCategoryResponse>("categories");
+            const response = await apiClient.get<FetchGunCategoryResponse>("categories");
             if (!response.data.data) { return; }
             setCategories(response.data.data);
         })();
 
         (async () => {
-            const response = await api.get<FetchBulletsResponse>("bullets");
+            const response = await apiClient.get<FetchBulletsResponse>("bullets");
             if (!response.data.data) { return; }
             setBullets(response.data.data);
         })();
@@ -129,14 +129,14 @@ export const RegistryGunForm: React.FC<RegistryGunFormProps> = ({ formId, showSu
         };
         console.log(request);
 
-        const response = await api.post<RegistryGunResponse>("guns", request);
+        const response = await apiClient.post<RegistryGunResponse>("guns", request);
         await present(`銃を登録しました:${response.data.data?.id}`);
 
         // 銃の画像も設定していた場合、続けて画像を登録する
         if (data.imageUrl) {
             const file = await download(data.imageUrl, response.data.data!.id);
             const form = file2formData('data', file);
-            const registryImgResponse = await api.post<UploadGunImageResponse>(`guns/${response.data.data?.id}`, form);
+            const registryImgResponse = await apiClient.post<UploadGunImageResponse>(`guns/${response.data.data?.id}`, form);
             await present(`画像を登録しました:${registryImgResponse.data.data?.url}`);
         }
     });
