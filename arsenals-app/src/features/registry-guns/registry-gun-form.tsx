@@ -40,7 +40,10 @@ const formSchema = z.object({
     ),
     useBullets: z.array(z.string())
         .optional(),
-    imageUrl: z.string()
+    imageUrl: z.custom<FileList>()
+        .refine(file => file.length !== 0)
+        .refine(file => file[0].type.startsWith("image/"), { message: '画像ファイルをアップロードしてください' })
+        .refine(file => file[0].size <= 5 * 1024 * 1024, { message: 'ファイルサイズは5MB以下である必要があります。' })
         .optional()
 });
 
@@ -59,7 +62,14 @@ export const RegistryGunForm: React.FC<RegistryGunFormProps> = ({ formId, showSu
     const [presentDialog, dismiss] = useIonModal(RegistryBulletDialog, {
         dismiss: (data: string, role: string) => dismiss(data, role)
     });
-    const { download, file2formData } = useImgDl();
+    const { file2formData } = useImgDl();
+
+    const toBase64 = (file: File) => new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result as string);
+        reader.onerror = error => reject(error);
+    });
 
     const {
         control,
@@ -69,7 +79,7 @@ export const RegistryGunForm: React.FC<RegistryGunFormProps> = ({ formId, showSu
         setValue,
         watch,
     } = useForm<RegistryGunFormValues>({
-        defaultValues: { name: '', categoryId: '', capacity: undefined, imageUrl: '', useBullets: [] },
+        defaultValues: { name: '', categoryId: '', capacity: undefined, imageUrl: undefined, useBullets: [] },
         resolver: zodResolver(formSchema)
     });
 
@@ -93,9 +103,9 @@ export const RegistryGunForm: React.FC<RegistryGunFormProps> = ({ formId, showSu
     // 入力のたびに外部に渡す
     useEffect(() => {
         if (!setGun) { return; }
-        const { unsubscribe } = watch((value) => {
+        const { unsubscribe } = watch(async (value) => {
             const category: GunCategory | undefined = categories.find(x => x.id === value.categoryId);
-
+            console.log(value.imageUrl);
             const gun: Gun = {
                 ...value,
                 name: value.name ?? '',
@@ -104,7 +114,7 @@ export const RegistryGunForm: React.FC<RegistryGunFormProps> = ({ formId, showSu
                 bullets: value.useBullets
                     ? value.useBullets.map(x => bullets.find(y => y.id === x) as Bullet)
                     : [],
-                imageUrl: value.imageUrl
+                imageUrl: value.imageUrl && await toBase64((value.imageUrl[0]))
             };
             setGun(gun);
         });
@@ -134,9 +144,8 @@ export const RegistryGunForm: React.FC<RegistryGunFormProps> = ({ formId, showSu
 
         // 銃の画像も設定していた場合、続けて画像を登録する
         if (data.imageUrl) {
-            const file = await download(data.imageUrl, response.data.data!.id);
-            const form = file2formData('data', file);
-            const registryImgResponse = await apiClient.post<UploadGunImageResponse>(`guns/${response.data.data?.id}`, form);
+            const form = file2formData('data', data.imageUrl[0]);
+            const registryImgResponse = await apiClient.post<UploadGunImageResponse>(`guns/${response.data.data?.id}/images`, form);
             await present(`画像を登録しました:${registryImgResponse.data.data?.url}`);
         }
     });
@@ -202,7 +211,7 @@ export const RegistryGunForm: React.FC<RegistryGunFormProps> = ({ formId, showSu
                             </IonItem>
 
                             <IonItem lines="none">
-                                <IonInput
+                                {/* <IonInput
                                     type="url"
                                     label="銃画像"
                                     role="textbox"
@@ -210,7 +219,8 @@ export const RegistryGunForm: React.FC<RegistryGunFormProps> = ({ formId, showSu
                                     placeholder="https://guns.images.com/g3a1.jpeg"
                                     errorText={`${errors.imageUrl?.message}`}
                                     className={`${errors.imageUrl ? 'ion-invalid' : 'ion-valid'}`}
-                                    {...register('imageUrl')} />
+                                    {...register('imageUrl')} /> */}
+                                <input type="file" {...register('imageUrl')} />
                             </IonItem>
                         </IonList>
                     </IonCol>
