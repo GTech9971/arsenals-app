@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from "@/testing/test-utils";
-import { RegistryGunForm } from "../registry-guns/registry-gun-form";
+import { RegistryGunForm } from "../guns/components/registry-guns/registry-gun-form";
 import '@testing-library/jest-dom'
 import userEvent, { UserEvent } from "@testing-library/user-event";
 

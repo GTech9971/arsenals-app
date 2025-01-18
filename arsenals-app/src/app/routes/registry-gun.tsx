@@ -1,6 +1,6 @@
 import { GunCard } from "@/components/gun-card"
 import { ContentLayout } from "@/components/layouts/content-layout"
-import { RegistryGunForm } from "@/features/registry-guns/registry-gun-form";
+import { RegistryGunForm } from "@/features/guns/components/registry-guns/registry-gun-form";
 import { Gun } from "@gtech9971/arsenals.model";
 import {
     IonBackButton,

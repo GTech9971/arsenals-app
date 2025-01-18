@@ -3,6 +3,7 @@ import { FetchGunsResponse, Gun, RegistryGunResponse } from "@gtech9971/arsenals
 import { http, HttpResponse } from "msw";
 import { DummyBulletC } from "./bullets";
 import { DummyCategoryA, DummyCategoryB } from "./categories";
+import { HttpStatusCode } from "axios";
 
 export const gunsHandlers = [
     // 全銃取得
@@ -12,9 +13,6 @@ export const gunsHandlers = [
         let data: Gun[] = [
             DummyGunA,
             DummyGunB,
-            DummyGunA,
-            DummyGunA,
-            DummyGunB
         ];
 
         const categoryId: string | null = url.searchParams.get('category');
@@ -36,6 +34,11 @@ export const gunsHandlers = [
             data: { id: 'G-1000' }
         }, { status: 201 })
     }),
+
+    // 削除
+    http.delete(`${env.API_URL}/guns/*`, async () => {
+        return HttpResponse.text(null, { status: HttpStatusCode.NoContent });
+    })
 ];
 
 const DummyGunA: Gun = {
@@ -48,7 +51,7 @@ const DummyGunA: Gun = {
 };
 
 const DummyGunB: Gun = {
-    id: "G-1000",
+    id: "G-2000",
     name: 'M1911A1',
     category: DummyCategoryA,
     capacity: 6,
