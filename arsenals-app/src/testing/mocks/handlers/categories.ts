@@ -1,6 +1,7 @@
 import { http, HttpResponse } from "msw";
 import { env } from '@/config/env';
 import { FetchGunCategoryResponse, GunCategory, RegistryGunCategoryResponse } from '@gtech9971/arsenals.model'
+import { HttpStatusCode } from "axios";
 
 /**
  * 銃カテゴリーのMSWハンドラー
@@ -24,6 +25,11 @@ export const categoriesHandlers = [
             error: undefined,
             data: { id: 'C-1000' }
         }, { status: 201 })
+    }),
+
+    // カテゴリー削除
+    http.delete(`${env.API_URL}/categories/*`, async () => {
+        return HttpResponse.text(null, { status: HttpStatusCode.NoContent })
     }),
 ]
 
