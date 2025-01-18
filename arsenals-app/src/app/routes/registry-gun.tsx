@@ -37,8 +37,7 @@ export const RegistryGun = () => {
         <ContentLayout
             title="銃登録"
             leftToolbar={<RegistryGunLeftToolbar />}
-            rightToolbar={<RegistryGunRightToolbar />}
-        >
+            rightToolbar={<RegistryGunRightToolbar />}>
             <IonGrid>
                 <IonRow>
                     <IonCol size="6">
@@ -51,7 +50,7 @@ export const RegistryGun = () => {
                                 <IonText>プレビュー</IonText>
                             </IonListHeader>
                             <IonItem>
-                                <GunCard {...gun} />
+                                {gun ? <GunCard gun={gun} /> : <></>}
                             </IonItem>
                         </IonList>
                     </IonCol>

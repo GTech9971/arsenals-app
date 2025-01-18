@@ -5,24 +5,34 @@ import {
     IonCardHeader,
     IonCardSubtitle,
     IonCardTitle,
-    IonImg
+    IonImg,
 } from "@ionic/react";
+import { ReactNode } from "react";
 
-export const GunCard = (props: Gun) => {
+export type GunCardProps = {
+    gun: Gun,
+    popover?: ReactNode,
+}
+
+export const GunCard: React.FC<GunCardProps> = ({ gun, popover }) => {
+
     return (
-        <IonCard style={{ width: '320px' }}>
-            <IonImg src={props.imageUrl} />
+        <IonCard style={{ maxWidth: '320px', minHeight: '300px' }}>
+
+            {popover}
+
+            <IonImg src={gun.imageUrl} />
             <IonCardHeader>
                 <IonCardTitle>
-                    {props.name}
+                    {gun.name}
                 </IonCardTitle>
                 <IonCardSubtitle>
-                    {props.category?.name}
+                    {gun.category?.name}
                 </IonCardSubtitle>
 
             </IonCardHeader>
             <IonCardContent>
-                装弾数:{props.capacity}
+                装弾数:{gun.capacity}
             </IonCardContent>
         </IonCard>
     )
